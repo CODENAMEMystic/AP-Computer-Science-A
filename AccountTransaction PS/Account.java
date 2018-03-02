@@ -4,12 +4,14 @@ import java.util.Date;
 import java.util.List;
 
 public class Account {
-	private static double annualInterestRate = 0;
+	
 	
 	private String customer; 
 
 	private int id = 0;
-	private double balance = 0;	
+	private double balance = 0;
+	private static double annualInterestRate = 0;
+	
 	private Date dateCreated;
 	
 	private List<Transaction> transactions;
@@ -23,7 +25,7 @@ public class Account {
 	public Account(int id, double balance) {
 		this.id = id;
 		this.balance = balance;
-		dateCreated = new Date();
+		this.dateCreated = new Date();
 	}
 	
 	public Account(String customer, int id, double balance) {
@@ -32,6 +34,8 @@ public class Account {
 		this.balance = balance;
 		dateCreated = new Date();
 	}
+	
+	
 	
 	public List<Transaction> getTransactions() {
 		return transactions;
@@ -44,9 +48,8 @@ public class Account {
 	public String getCustomer() {
 		return customer;
 	}
-	public void setCustomer(String customer) {
-		this.customer = customer;
-	}
+	
+	
 	
 	public int getId() {
 		return id;
@@ -84,17 +87,30 @@ public class Account {
 		return Math.pow(1 + annualInterestRate, (1/12.0)) - 1;
 	}
 	
-	public double withdraw(double amount) {
-		if(amount < balance) {
-			balance -= amount;
-			return balance;
-		} else {
-			return balance;
+	public void withdraw(double amount) {
+        this.balance -= amount;
+        Transaction t = new Transaction('W', amount, this.balance, "Withdraw from account.");
+        transactions.add(t);
+    }
+
+    public void deposit(double amount) {
+        this.balance += amount;
+        Transaction t = new Transaction('D', amount, this.balance, "Deposit to account.");
+        transactions.add(t);
+    }
+    
+    
+	public String toString() {
+		String output = "ID: "+id + "\t"+"Customer: "+customer + "\t"+"Balance: "+balance;
+		
+		/*
+		for(int i = 0; i < transactions.size(); i++) {
+			output += transactions.get(i);
 		}
+		output += "\n";
+		*/
+		//output += ""+this.transactions;
+		return output;
 	}
 	
-	public double deposit(double amount) {
-		balance += amount;
-		return balance;
-	}
 }
